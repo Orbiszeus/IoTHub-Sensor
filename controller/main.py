@@ -21,7 +21,32 @@ QUERY = (
     'LIMIT 100'
 )
 query_job = client.query(QUERY)  # API request
+
 rows = query_job.result()  # Waits for query to finish
 
 for row in rows:
-    print(row.name)
+    # Accessing elements by index
+    line = row[0]
+    start_longitude = row[1]
+    start_latitude = row[2]
+    end_longitude = row[3]
+    end_latitude = row[4]
+    call_sign = row[5]
+
+    # Accessing elements by field names from the dictionary
+    line = row['line']
+    start_longitude = row['start_longitude']
+    start_latitude = row['start_latitude']
+    end_longitude = row['end_longitude']
+    end_latitude = row['end_latitude']
+    call_sign = row['call_sign']
+
+    # Print the values
+    print("Line:", line)
+    print("Start Longitude:", start_longitude)
+    print("Start Latitude:", start_latitude)
+    print("End Longitude:", end_longitude)
+    print("End Latitude:", end_latitude)
+    print("Call Sign:", call_sign)
+
+        
