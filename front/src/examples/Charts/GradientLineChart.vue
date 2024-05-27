@@ -140,7 +140,7 @@ export default {
 
         for (let i = 0; i < this.devices.length; i++) {
         
-          this.temperature_values.push(this.devices[i]['temperature']);
+          this.temperature_values.push(this.devices[i]['alcohol']);
           this.device_types.push(this.devices[i]['id'])
           // if (this.devices[i]['type'] == "Thermometer") {
           //   console.log("hello")

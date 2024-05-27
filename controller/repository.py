@@ -10,7 +10,7 @@ class Repository:
         
         QUERY = (
             'SELECT * FROM local-incline-419216.finalproject.finalproject '
-            'ORDER BY `when` DESC LIMIT 100'
+            'ORDER BY `when` DESC LIMIT 35'
         )
         query_job = client.query(QUERY) 
 
