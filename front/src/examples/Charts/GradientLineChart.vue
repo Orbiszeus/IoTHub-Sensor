@@ -132,24 +132,26 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/devices?limit=45');
-        const data = response.data;
+        const response = await axios.get('http://127.0.0.1:8000/all_items');
+        const data = JSON.parse(response.data);
         this.devices = data;
-
+        
+        console.log(data)
 
         for (let i = 0; i < this.devices.length; i++) {
-          if (this.devices[i]['type'] == "Thermometer") {
-            console.log("hello")
+        
+          this.temperature_values.push(this.devices[i]['temperature']);
+          this.device_types.push(this.devices[i]['id'])
+          // if (this.devices[i]['type'] == "Thermometer") {
+          //   console.log("hello")
+          //   this.device_types.push("Device " + i);
+          //   // if (this.devices[i]['payload']['data'] == 'Initiating') {
+          //   //   this.temperature_values.pop();
+          //   //   this.device_types.pop();
+          //   // }
+          //   // console.log(this.devices[i]['Temperature'])
             
-            this.temperature_values.push(this.devices[i]['payload']['data']);
-            this.device_types.push("Device " + i);
-            if (this.devices[i]['payload']['data'] == 'Initiating') {
-              this.temperature_values.pop();
-              this.device_types.pop();
-            }
-            console.log(this.devices[i]['Temperature'])
-            
-          }
+          // }
         }
         console.log(this.temperature_values);
 

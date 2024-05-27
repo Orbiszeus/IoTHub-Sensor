@@ -127,31 +127,33 @@ export default {
     }
   },
   created() {
-    axios.get('http://127.0.0.1:8000/latest')
+    axios.get('http://127.0.0.1:8000/latest_item')
       .then(response => {
-        const data = response.data[0]; // Assuming you want to use the first object in the array
+        console.log("hey")
+        const data = JSON.parse(response.data);
+        console.log(data.when);
         this.stats.money = {
-          title: "Mac Address",
+          title: "ID",
           // value: this.secureMAC(data.device_mac),
-          value: data.device_mac,
+          value: data.id,
           iconClass: "ni ni-money-coins",
           iconBackground: "bg-gradient-primary",
         };
         this.stats.users = {
-          title: "Data",
-          value: data.payload.data.toString(),
+          title: "Temperature",
+          value: data.temperature,
           iconClass: "ni ni-world",
           iconBackground: "bg-gradient-danger",
         };
         this.stats.clients = {
-          title: "Device Type",
-          value: data.type,
+          title: "Humidity",
+          value: data.humidity,
           iconClass: "ni ni-paper-diploma",
           iconBackground: "bg-gradient-success",
         };
         this.stats.sales = {
           title: "Date",
-          value: data.timestamp.toString().slice(11, 20),
+          value: data.date.toString().slice(0, 10),
           iconClass: "ni ni-cart",
           iconBackground: "bg-gradient-warning",
         };

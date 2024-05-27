@@ -47,10 +47,7 @@ class Repository:
 
         rows = query_job.result() 
         
-        
         row = next(rows)
-
-
         item = {
             "temperature": row['temperature'],
             "humidity": row['humidity'],
