@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: "/dashboard-default",
-    name: "Dashboard",
+    name: "Latest Data",
     component: Dashboard,
   },
   {

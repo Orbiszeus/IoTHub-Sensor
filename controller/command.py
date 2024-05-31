@@ -58,7 +58,7 @@ async def func():
     fast_mqtt.publish("2500319/data/sub/led/cmd", '0')  
     return {"result": True, "message": "Published"}
 
-# @app.get("/test")
-# async def func():
-#     fast_mqtt.publish("/2500319", "Hello from Fastapi")  # publishing mqtt topic
-#     return {"result": True, "message": "Published"}
+@app.get("/test")
+async def func():
+    fast_mqtt.publish("/2500319", "Hello from Fastapi")  # publishing mqtt topic
+    return {"result": True, "message": "Published"}

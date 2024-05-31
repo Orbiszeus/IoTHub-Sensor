@@ -112,7 +112,7 @@ export default {
   props: {
     cardTitle: {
       type: String,
-      default: "Device Counts",
+      default: "Recent Alerts",
     },
     title: {
       type: String,

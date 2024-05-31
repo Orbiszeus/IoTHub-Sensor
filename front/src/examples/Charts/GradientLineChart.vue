@@ -8,7 +8,11 @@
         {{ detail2 }}
       </p>
       <!-- Dropdown for selecting data type -->
-      <select v-model="selectedDataType" @change="handleSelectionChange">
+      <select
+        v-model="selectedDataType"
+        @change="handleSelectionChange"
+        style="border: 1px solid #ced4da; border-radius: 0.25rem; padding: 0.375rem 1.75rem 0.375rem 0.75rem; font-size: 1rem; line-height: 1.5; background-color: #fff; background-clip: padding-box; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075); transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;"
+      >
         <option value="temperature">Temperature</option>
         <option value="alcohol">Alcohol</option>
         <option value="humidity">Humidity</option>
