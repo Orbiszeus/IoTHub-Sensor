@@ -15,12 +15,9 @@ app.add_middleware(
 repo = repository.Repository
 
 @app.get("/all_items")
-def get_all():
-     
-    return repo.get_all_items()
+def get_all(limit: int):
+    return repo.get_all_items(limit)
 
 @app.get("/latest_item")
 def get_latest():
-    print(repo.get_latest_item()) 
     return repo.get_latest_item()
-

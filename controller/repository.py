@@ -5,14 +5,19 @@ client = bigquery.Client.from_service_account_json('/Users/orbiszeus/Downloads/I
 
 class Repository:
         
-    def get_all_items():
+    def get_all_items(limit):
         all_items = []
-        
+        print("hey")
         QUERY = (
             'SELECT * FROM local-incline-419216.finalproject.finalproject '
-            'ORDER BY `when` DESC LIMIT 35'
+            'ORDER BY `when` DESC LIMIT @limit'
         )
-        query_job = client.query(QUERY) 
+        
+        job_config = bigquery.QueryJobConfig(
+            query_parameters=[
+            bigquery.ScalarQueryParameter('limit', 'INT64', limit)])
+        
+        query_job = client.query(QUERY, job_config=job_config)
 
         rows = query_job.result() 
         

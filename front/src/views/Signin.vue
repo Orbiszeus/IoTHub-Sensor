@@ -48,7 +48,7 @@
                     <a
                       href="javascript:;"
                       class="text-success text-gradient font-weight-bold"
-                    >Sign up</a>
+                    >Send Command</a>
                   </p>
                 </div>
               </div>

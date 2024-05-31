@@ -8,7 +8,7 @@ from typing import Any
 fast_mqtt = FastMQTT(config=MQTTConfig())
 
 mqtt_config = MQTTConfig(
-    host="35.205.46.103",
+    host="35.240.58.211",
     port=1883,
     keepalive=60
 )
