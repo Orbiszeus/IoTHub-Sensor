@@ -36,11 +36,27 @@
           </div>
         </div>
         <div class="row mt-4">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Control LED</h5>
+                <div class="form-group">
+                  <label for="colorSelect">Select LED Color:</label>
+                  <select v-model="selectedColor" class="form-control" id="colorSelect">
+                    <option value="red">Red</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                  </select>
+                </div>
+                <button @click="changeLedState(1)" class="btn btn-success mr-2">On</button>
+                <button @click="changeLedState(0)" class="btn btn-danger">Off</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
           <div class="col-lg-7 mb-lg-0 mb-4">
-            
-              
-
-                 
+            <!-- Placeholder for other content -->
           </div>
           <div class="col-lg-5">
             <categories-card />
@@ -50,6 +66,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 import Card from "@/examples/Cards/Card.vue";
@@ -67,18 +84,10 @@ export default {
   data() {
     return {
       stats: {
-        money: {
-
-        },
-        users: {
-
-        },
-        clients: {
-
-        },
-        sales: {
-
-        },
+        money: {},
+        users: {},
+        clients: {},
+        sales: {},
       },
       sales: {
         us: {
@@ -110,6 +119,7 @@ export default {
           flag: BR,
         },
       },
+      selectedColor: 'red',  // Default selected color
     };
   },
   components: {
@@ -124,17 +134,34 @@ export default {
       if (mac.length > 20)
         securedMAC = mac.slice(0, 8) + '...' + mac.slice(mac.length - 8, mac.length);
       return securedMAC;
-    }
+    },
+    async changeLedState(state) {
+      let endpoint = '';
+      switch (this.selectedColor) {
+        case 'red':
+          endpoint = 'change_red_led';
+          break;
+        case 'green':
+          endpoint = 'change_green_led';
+          break;
+        case 'yellow':
+          endpoint = 'change_yellow_led';
+          break;
+      }
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/${endpoint}?on_off=${state}`);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
   },
   created() {
     axios.get('http://127.0.0.1:8000/latest_item')
       .then(response => {
-        console.log("hey")
         const data = JSON.parse(response.data);
-        console.log(data.when);
         this.stats.money = {
           title: "ID",
-          // value: this.secureMAC(data.device_mac),
           value: data.id,
           iconClass: "ni ni-money-coins",
           iconBackground: "bg-gradient-primary",
@@ -164,6 +191,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .col-lg-7 {
   width: 100%;
@@ -172,5 +200,18 @@ export default {
 .col-lg-5 {
   padding-top: 35px;
   width: 100%;
+}
+
+.card-title {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.btn {
+  margin-right: 10px;
 }
 </style>

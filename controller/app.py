@@ -82,9 +82,25 @@ def get_latest():
 This endpoint is to send a command to the mqtt broker to close
 or open the led light, we send either 0 or 1 to do that. 
 '''
-@app.get("/change_led")
-async def func():
-    fast_mqtt.publish("2500319/data/sub/led/cmd", '1')  
+@app.get("/change_red_led")
+async def func(on_off: int):
+    if on_off not in [0,1]:
+        return {"result": False, "message": "Invalid value"}
+    fast_mqtt.publish("2500319/data/sub/redled/cmd", str(on_off)) 
+    return {"result": True, "message": "Published"}
+
+@app.get("/change_yellow_led")
+async def func(on_off: int):
+    if on_off not in [0,1]:
+        return {"result": False, "message": "Invalid value"}
+    fast_mqtt.publish("2500319/data/sub/yellowled/cmd", str(on_off)) 
+    return {"result": True, "message": "Published"}
+
+@app.get("/change_green_led")
+async def func(on_off: int):
+    if on_off not in [0,1]:
+        return {"result": False, "message": "Invalid value"}
+    fast_mqtt.publish("2500319/data/sub/greenled/cmd", str(on_off)) 
     return {"result": True, "message": "Published"}
 
 @app.get("/alerts")
