@@ -33,20 +33,13 @@
         </h6>
         <h6 v-else class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
           :class="this.$store.state.isRTL ? 'me-4' : 'ms-2'">
-          ACCOUNT PAGES
+          
         </h6>
       </li>
       <li class="nav-item">
 
       </li>
-      <li class="nav-item">
-        <sidenav-item url="/signup" :class="getRoute() === 'signup' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'اشتراك' : 'Send Commands'">
-          <template v-slot:icon>
-            <i class="ni ni-collection text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
+      
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
