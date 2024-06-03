@@ -16,6 +16,7 @@ mqtt_config = MQTTConfig(
 )
 
 fast_mqtt = FastMQTT(config=mqtt_config)
+
 @asynccontextmanager
 async def _lifespan(_app: FastAPI):
     await fast_mqtt.mqtt_startup()
@@ -34,33 +35,32 @@ app.add_middleware(
 
 repo = repository.Repository()
 
+# Store the current alert states
+alerts = {
+    "temperature": 0,
+    "humidity": 0,
+    "alcohol": 0
+}
 
 @fast_mqtt.on_connect()
 def connect(client, flags, rc, properties):
     fast_mqtt.client.subscribe("/2500319") #subscribing mqtt topic
     print("Connected: ", client, flags, rc, properties)
 
-'''
-This mqtt subscribe method has subscribed to the broker's method
-that sends alerts when some values are over what it should be,
-like if the temperature is higher then what normally is an alert
-will be sent to here. 
-'''
 @fast_mqtt.subscribe("2500319/data/pub/temp/alarm", qos=1)
 async def alert_temp(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+    alerts["temperature"] = int(payload.decode())
     print("ALERT TEMPERATURE: ", topic, payload.decode(), qos, properties)
 
 @fast_mqtt.subscribe("2500319/data/pub/hum/alarm", qos=1)
 async def alert_hum(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+    alerts["humidity"] = int(payload.decode())
     print("ALERT HUMIDITY: ", topic, payload.decode(), qos, properties)
-    
+
 @fast_mqtt.subscribe("2500319/data/pub/alcohol/alarm", qos=1)
 async def alert_alco(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
+    alerts["alcohol"] = int(payload.decode())
     print("ALERT ALCOHOL: ", topic, payload.decode(), qos, properties)
-     
-# @fast_mqtt.on_message()
-# async def message(client: MQTTClient, topic: str, payload: bytes, qos: int, properties: Any):
-#     print("Received message: ", topic, payload.decode(), qos, properties)
 
 @fast_mqtt.on_disconnect()
 def disconnect(client: MQTTClient, packet, exc=None):
@@ -78,10 +78,6 @@ def get_all(limit: int):
 def get_latest():
     return repo.get_latest_item()
 
-'''
-This endpoint is to send a command to the mqtt broker to close
-or open the led light, we send either 0 or 1 to do that. 
-'''
 @app.get("/change_red_led")
 async def func(on_off: int):
     if on_off not in [0,1]:
@@ -105,4 +101,4 @@ async def func(on_off: int):
 
 @app.get("/alerts")
 def get_alerts():
-    return 0
+    return alerts

@@ -116,19 +116,15 @@ export default {
     },
     title: {
       type: String,
-      default: "Devices",
+      default: "Temperature",
     },
     title2: {
       type: String,
-      default: "Tickets",
+      default: "Humidity",
     },
     title3: {
       type: String,
-      default: "Error logs",
-    },
-    title4: {
-      type: String,
-      default: "",
+      default: "Alcohol",
     },
     titleDesc: {
       type: String,
@@ -156,7 +152,7 @@ export default {
     },
     title3Desc2: {
       type: String,
-      default: "40 closed",
+      default: "",
     },
   },
   methods: {

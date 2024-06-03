@@ -120,6 +120,8 @@ export default {
         },
       },
       selectedColor: 'red',  // Default selected color
+      alerts: [],  // To store alerts
+      intervalId: null  // ID for the interval timer
     };
   },
   components: {
@@ -155,6 +157,23 @@ export default {
         console.error('Error:', error);
       }
     },
+    async fetchAlerts() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/alerts');
+        const alertData = response.data;
+        if (alertData.temperature === 1) {
+          alert('High Temperature Alert!!');
+        }
+        if (alertData.humidity === 1) {
+          alert('High Humidity Alert!!');
+        }
+        if (alertData.alcohol === 1) {
+          alert('High Alcohol Alert!!');
+        }
+      } catch (error) {
+        console.error('Error fetching alerts:', error);
+      }
+    },
   },
   created() {
     axios.get('http://127.0.0.1:8000/latest_item')
@@ -188,6 +207,15 @@ export default {
       .catch(error => {
         console.error(error);
       });
+
+    // Poll the alerts endpoint every 5 seconds
+    this.intervalId = setInterval(this.fetchAlerts, 5000);
+  },
+  beforeUnmount() {
+    // Clear the interval when the component is destroyed
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 };
 </script>
