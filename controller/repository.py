@@ -5,7 +5,7 @@ client = bigquery.Client.from_service_account_json('/Users/orbiszeus/Downloads/I
 
 class Repository:
         
-    def get_all_items(limit):
+    def get_all_items(self, limit):
         all_items = []
         print("hey")
         QUERY = (
@@ -43,7 +43,7 @@ class Repository:
         return all_items_json
 
     
-    def get_latest_item():
+    def get_latest_item(self):
         QUERY = (
             'SELECT * FROM `local-incline-419216.finalproject.finalproject` '
             'ORDER BY `when` DESC LIMIT 1'

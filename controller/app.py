@@ -12,7 +12,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-repo = repository.Repository
+repo = repository.Repository()
 
 @app.get("/all_items")
 def get_all(limit: int):
