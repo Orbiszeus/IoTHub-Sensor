@@ -38,7 +38,7 @@ float temp_min_limite=10;
 float hum_max_limite=70;
 float hum_min_limite=30;
 float co_limite;  
-float alcohol_limite=2; 
+float alcohol_limite=30; 
 float co2_limite;
 float tolueno_limite;
 float nh4_limite;
@@ -65,7 +65,10 @@ const String mqtt_pass = "zancudo";
 // cadenas para topics e ID
 String ID_PLACA;
 String topic_PUB;
-String topic_SUB;
+String topic_SUB_REDLED;
+String topic_SUB_YELLOWLED;
+String topic_SUB_GREENLED;
+
 String topic_PUB_TEMP_ALARM;
 String topic_PUB_HUM_ALARM;
 String topic_PUB_ALCOHOL_ALARM;
@@ -101,7 +104,9 @@ void conecta_mqtt() {
     // Attempt to connect
     if (mqtt_client.connect(ID_PLACA.c_str(), mqtt_user.c_str(), mqtt_pass.c_str())) {
       Serial.println(" conectado a broker: " + mqtt_server);
-      mqtt_client.subscribe(topic_SUB.c_str());
+      mqtt_client.subscribe(topic_SUB_REDLED.c_str());
+      mqtt_client.subscribe(topic_SUB_YELLOWLED.c_str());
+      mqtt_client.subscribe(topic_SUB_GREENLED.c_str());
     } else {
       Serial.println("ERROR:"+ String(mqtt_client.state()) +" reintento en 5s" );
       // Wait 5 seconds before retrying
@@ -115,13 +120,37 @@ void procesa_mensaje(char* topic, byte* payload, unsigned int length) {
   String message=String(std::string((char*) payload,length).c_str());
   Serial.println("Message received ["+ String(topic) +"] "+ message);
   // check the topic
-  if(String(topic)==topic_SUB) 
+  if(String(topic)==topic_SUB_REDLED) 
   {
     if (message[0] == '0') {
         Serial.println("Turning off RED LED....");
         digitalWrite(LEDROJO, LOW);   // Turn the LED on (Note that LOW is the voltage level 
+        delay(10000);
       } else {
         digitalWrite(LEDROJO, HIGH);  // Turn the LED off by making the voltage HIGH
+        delay(10000);
+      }
+  }
+  else if(String(topic)==topic_SUB_YELLOWLED)
+  {
+    if (message[0] == '0') {
+        Serial.println("Turning off YELLOW LED....");
+        digitalWrite(LEDAMARILLO, LOW);   // Turn the LED on (Note that LOW is the voltage level 
+        delay(10000);
+      } else {
+        digitalWrite(LEDAMARILLO, HIGH);  // Turn the LED off by making the voltage HIGH
+        delay(10000);
+      }
+  }
+  else 
+  {
+    if (message[0] == '0') {
+        Serial.println("Turning off GREEN LED....");
+        digitalWrite(LEDVERDE, LOW);   // Turn the LED on (Note that LOW is the voltage level 
+        delay(10000);
+      } else {
+        digitalWrite(LEDVERDE, HIGH);  // Turn the LED off by making the voltage HIGH
+        delay(10000);
       }
   }
 }
@@ -174,7 +203,10 @@ void setup() {
   //ID_PLACA="ESP_" + String( ESP.getChipId() );
   ID_PLACA= String( ESP.getChipId() );
   topic_PUB=ID_PLACA+"/data/pub";
-  topic_SUB=ID_PLACA+"/data/sub/led/cmd";
+  topic_SUB_REDLED=ID_PLACA+"/data/sub/redled/cmd";
+  topic_SUB_YELLOWLED=ID_PLACA+"/data/sub/yellowled/cmd";
+  topic_SUB_GREENLED=ID_PLACA+"/data/sub/greenled/cmd";
+
   topic_PUB_TEMP_ALARM = ID_PLACA+"/data/pub/temp/alarm";
   topic_PUB_HUM_ALARM = ID_PLACA+"/data/pub/hum/alarm";
   topic_PUB_ALCOHOL_ALARM = ID_PLACA+"/data/pub/alcohol/alarm";
@@ -187,7 +219,10 @@ void setup() {
   conecta_mqtt();
   Serial.println("Identificador placa: "+ ID_PLACA);
   Serial.println("Topic publicacion  : "+ topic_PUB);
-  Serial.println("Topic subscripcion : "+ topic_SUB);
+  Serial.println("Topic subscripcion comando LED rojo : "+ topic_SUB_REDLED);
+  Serial.println("Topic subscripcion comando LED amarillo : "+ topic_SUB_YELLOWLED);
+  Serial.println("Topic subscripcion comando LED verde : "+ topic_SUB_GREENLED);
+
   Serial.println("Termina setup en " +  String(millis()) + " ms");
 }
 
@@ -239,16 +274,6 @@ void loop() {
     //Send data to the MQTT broker
     mqtt_client.publish(topic_PUB.c_str(), mensaje.c_str());
 
-    if (all_ok = 1)
-    {
-      Serial.println("Esta todo bien, encendemos LED VERDE");
-      digitalWrite(LEDVERDE, HIGH);
-      digitalWrite(LEDROJO, LOW);
-    }else{
-      Serial.println("Hay algo que no esta bien, encendemos LED ROJO");
-      digitalWrite(LEDVERDE, LOW);
-      digitalWrite(LEDROJO, HIGH);
-    }
 
     if (temperatura > temp_max_limite){
       digitalWrite(LEDVERDE, LOW);
