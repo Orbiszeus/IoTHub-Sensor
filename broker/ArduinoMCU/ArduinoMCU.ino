@@ -37,7 +37,7 @@ float temp_min_limite = 10;
 float hum_max_limite = 70;
 float hum_min_limite = 30;
 float co_limite;
-float alcohol_limite = 30;
+float alcohol_limite = 80;
 float co2_limite;
 float tolueno_limite;
 float nh4_limite;
@@ -52,8 +52,8 @@ WiFiClient wClient;
 PubSubClient mqtt_client(wClient);
 
 // Update these with values suitable for your network.
-const String ssid = "iPhone de Juan";
-const String password = "pLvG-xmjG-GVDd-KAg9";
+const String ssid = "set your WiFi SSID";
+const String password = "set your password";
 const String mqtt_server = "35.240.58.211";
 const String mqtt_user = "infind";
 const String mqtt_pass = "zancudo";
@@ -219,7 +219,7 @@ void setup()
   pinMode(LEDVERDE, OUTPUT);
   pinMode(LEDAMARILLO, OUTPUT);
   digitalWrite(LEDROJO, LOW);
-  digitalWrite(LEDVERDE, LOW); // apaga el led
+  digitalWrite(LEDVERDE, HIGH); // apaga el led
   digitalWrite(LEDAMARILLO, LOW);
   dht.setup(5, DHTesp::DHT11); // Conectamos con el sensor DHT al GPIO 5
   // crea topics usando id de la placa
